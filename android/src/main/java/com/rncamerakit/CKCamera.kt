@@ -57,6 +57,13 @@ class CKCamera(context: ThemedReactContext) : FrameLayout(context), LifecycleObs
     private var shutterAnimationDuration: Int = 50
     private var effectLayer = View(context)
 
+    private val orientationsMap: Map<String, Any> = hashMapOf(
+            "PORTRAIT" to RNCameraKitModule.PORTRAIT,
+            "PORTRAIT_UPSIDE_DOWN" to RNCameraKitModule.PORTRAIT_UPSIDE_DOWN,
+            "LANDSCAPE_LEFT" to RNCameraKitModule.LANDSCAPE_LEFT,
+            "LANDSCAPE_RIGHT" to RNCameraKitModule.LANDSCAPE_RIGHT
+    )
+
     // Camera Props
     private var lensType = CameraSelector.LENS_FACING_BACK
     private var autoFocus = "on"
@@ -284,6 +291,12 @@ class CKCamera(context: ThemedReactContext) : FrameLayout(context), LifecycleObs
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, "IMG_" + System.currentTimeMillis())
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+        }
+
+        val fixOrientation = options["fixOrientation"]
+        if (fixOrientation != null) {
+            imageCapture?.targetRotation = orientationsMap[fixOrientation] as Int
+            onOrientationChange(orientationsMap[fixOrientation] as Int)
         }
 
         // Create the output file option to store the captured image in MediaStore
