@@ -295,6 +295,7 @@ class CKCamera(context: ThemedReactContext) : FrameLayout(context), LifecycleObs
 
         val fixOrientation = options["fixOrientation"]
         if (fixOrientation != null) {
+			orientationListener?.disable()
             imageCapture?.targetRotation = orientationsMap[fixOrientation] as Int
             onOrientationChange(orientationsMap[fixOrientation] as Int)
         }
