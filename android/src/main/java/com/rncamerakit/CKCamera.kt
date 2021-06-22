@@ -12,7 +12,7 @@ import android.graphics.Color
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.MediaActionSound
-import android.provider.MediaStore
+import android.net.Uri
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
