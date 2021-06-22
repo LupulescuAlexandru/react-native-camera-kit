@@ -288,7 +288,7 @@ class CKCamera(context: ThemedReactContext) : FrameLayout(context), LifecycleObs
 
     fun capture(options: Map<String, Any>, promise: Promise) {
         // Create output options object which contains file + metadata
-        val outputFile = File.createTempFile("IMG", ".jpg", context.getExternalFilesDir(null))
+        val outputFile = File.createTempFile("IMG", ".jpg", context.filesDir)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
 
         val fixOrientation = options["fixOrientation"]
