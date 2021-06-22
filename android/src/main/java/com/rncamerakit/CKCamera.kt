@@ -288,30 +288,14 @@ class CKCamera(context: ThemedReactContext) : FrameLayout(context), LifecycleObs
 
     fun capture(options: Map<String, Any>, promise: Promise) {
         // Create output options object which contains file + metadata
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, "IMG_" + System.currentTimeMillis())
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-        }
+        val outputFile = File.createTempFile("IMG", ".jpg", context.cacheDir)
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
 
         val fixOrientation = options["fixOrientation"]
         if (fixOrientation != null) {
 			orientationListener?.disable()
             imageCapture?.targetRotation = orientationsMap[fixOrientation] as Int
             onOrientationChange(orientationsMap[fixOrientation] as Int)
-        }
-
-        // Create the output file option to store the captured image in MediaStore
-        val outputOptions = when (outputPath) {
-            null -> ImageCapture.OutputFileOptions
-                    .Builder(
-                            context.contentResolver,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            contentValues
-                    )
-                    .build()
-            else -> ImageCapture.OutputFileOptions
-                    .Builder(File(outputPath))
-                    .build()
         }
 
         flashViewFinder()
@@ -332,17 +316,16 @@ class CKCamera(context: ThemedReactContext) : FrameLayout(context), LifecycleObs
 
             override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                 try {
-                    val savedUri = output.savedUri.toString()
+                    val savedUri = Uri.fromFile(outputFile)
                     onPictureTaken(savedUri)
                     Log.d(TAG, "CameraView: Photo capture succeeded: $savedUri")
 
                     val imageInfo = Arguments.createMap()
-                    imageInfo.putString("uri", savedUri)
-                    imageInfo.putString("id", output.savedUri?.path)
-                    imageInfo.putString("name", output.savedUri?.lastPathSegment)
+                    imageInfo.putString("uri", savedUri.toString())
+                    imageInfo.putString("name", savedUri.lastPathSegment)
                     imageInfo.putInt("width", width)
                     imageInfo.putInt("height", height)
-                    imageInfo.putString("path", output.savedUri?.path)
+                    imageInfo.putString("path", outputFile.getPath())
 
                     promise.resolve(imageInfo)
                 } catch (ex: Exception) {
