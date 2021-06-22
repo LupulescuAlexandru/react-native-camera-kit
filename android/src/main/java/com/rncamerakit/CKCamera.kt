@@ -317,7 +317,7 @@ class CKCamera(context: ThemedReactContext) : FrameLayout(context), LifecycleObs
             override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                 try {
                     val savedUri = Uri.fromFile(outputFile)
-                    onPictureTaken(savedUri)
+                    onPictureTaken(savedUri.toString())
                     Log.d(TAG, "CameraView: Photo capture succeeded: $savedUri")
 
                     val imageInfo = Arguments.createMap()
