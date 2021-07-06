@@ -9,8 +9,8 @@ const Camera = React.forwardRef((props, ref) => {
   const nativeRef = React.useRef();
 
   React.useImperativeHandle(ref, () => ({
-    capture: async () => {
-      return await CKCameraManager.capture({});
+    capture: async (options = {}) => {
+      return await CKCameraManager.capture(options);
     },
     requestDeviceCameraAuthorization: async () => {
       return await CKCameraManager.checkDeviceCameraAuthorizationStatus();
