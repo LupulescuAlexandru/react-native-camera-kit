@@ -19,7 +19,7 @@ const FLASH_MODE_OFF = 'off';
 
 const { width, height } = Dimensions.get('window');
 
-const CameraType = {
+export const CameraType = {
     Front: 'front',
     Back: 'back',
 };
