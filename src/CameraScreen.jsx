@@ -19,10 +19,10 @@ const FLASH_MODE_OFF = 'off';
 
 const { width, height } = Dimensions.get('window');
 
-export enum CameraType {
-  Front = 'front',
-  Back = 'back'
-}
+const CameraType = {
+    Front: 'front',
+    Back: 'back',
+};
 
 export type Props = {
   ratioOverlay?: string,
